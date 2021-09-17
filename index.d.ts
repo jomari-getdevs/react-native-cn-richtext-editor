@@ -30,6 +30,7 @@ export interface CNEditorProps {
   contentContainerStyle?: StyleProp<ViewStyle>;
   onFocus?: () => void;
   onBlur?: () => void;
+  onChangeSize?: () => void;
   placeholder?: string;
   textInputStyle?: StyleProp<TextStyle>;
 }
