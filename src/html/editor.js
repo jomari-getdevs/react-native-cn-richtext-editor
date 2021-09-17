@@ -122,9 +122,26 @@ const editorHTML = `
             document.getElementById("editor").addEventListener("input", function() {
                 let contentChanged = JSON.stringify({
                     type: 'onChange',
+                    height: document.getElementById("editor").offsetHeight,
                     data: document.getElementById("editor").innerHTML });
                 sendMessage(contentChanged);
             }, false);
+
+            document.getElementById("editor").addEventListener("focus", function(el) {
+              let focusChanged = JSON.stringify({
+                  type: 'onFocus',
+                  focus: true  });
+              sendMessage(focusChanged);
+            }, false);
+            
+            document.getElementById("editor").addEventListener("blur", function(el) {
+              let focusChanged = JSON.stringify({
+                  type: 'onFocus',
+                  focus: false  });
+              sendMessage(focusChanged);
+            }, false);
+
+
 
             var applyToolbar = function(toolType, value = '') {
                 switch (toolType) {
