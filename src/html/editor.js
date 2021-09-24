@@ -3,7 +3,7 @@ const editorHTML = `
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <style>
         html {
@@ -130,6 +130,7 @@ const editorHTML = `
             document.getElementById("editor").addEventListener("focus", function(el) {
               let focusChanged = JSON.stringify({
                   type: 'onFocus',
+                  height: document.getElementById("editor").offsetHeight,
                   focus: true  });
               sendMessage(focusChanged);
             }, false);
@@ -237,10 +238,17 @@ const editorHTML = `
                 case 'setHtml':
                   editor.innerHTML = msgData.value;
                   break;
-                  case 'style':
+                case 'resize':
+                  // var editorHeight = editor.content.scrollHeight;
+                  var contentChanged = JSON.stringify({
+                      type: 'onResize',
+                      height: editor.offsetHeight });
+                  sendMessage(contentChanged);
+                  break;
+                case 'style':
                     editor.style.cssText = msgData.value;
                     break;
-                    case 'placeholder':
+                case 'placeholder':
                       editor.setAttribute("placeholder", msgData.value);
                     break;
                 default: break;
