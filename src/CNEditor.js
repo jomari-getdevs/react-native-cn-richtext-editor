@@ -124,7 +124,11 @@ export default class CNEditor extends Component {
           this.onChangeHeight(message.height);
           this.onValueChanged(message.data);
           break;
+        case "onResize":
+            this.onChangeHeight(message.height);
+            break;
         case "onFocus":
+          this.onChangeHeight(message.height);
           this.onFocus(message.focus);
           break;
         default:
@@ -225,21 +229,27 @@ export default class CNEditor extends Component {
 
     const jsonString = JSON.stringify({ type: "editor", command: "focus" });
     const origBody = JSON.stringify({ type: "toolbar", command: "body" });
+    const resizeBody = JSON.stringify({ type: "editor", command: "resize" });
 
     if (this.webViewRef) {
-      if (isIos) {
-        setTimeout(() => {
-          // this.webViewRef.postMessage(jsonString);
-          // this.webViewRef.postMessage(jsonString);
-          this.webViewRef.postMessage(origBody);
-        }, 100);
-      } else {
-        setTimeout(() => {
-          // this.webViewRef.requestFocus();
-          // this.webViewRef.requestFocus();
-          this.webViewRef.postMessage(origBody);
-        }, 100);
+      try{
+        if (isIos) {
+          setTimeout(() => {
+            this.webViewRef?.postMessage(origBody);
+            this.webViewRef?.postMessage(resizeBody);
+          }, 100);
+        } else {
+          setTimeout(() => {
+            // this.webViewRef.requestFocus();
+            // this.webViewRef.requestFocus();
+            this.webViewRef?.postMessage(origBody);
+            this.webViewRef?.postMessage(resizeBody);
+          }, 100);
+        }  
+      }catch(err){
+        
       }
+      
     }
   };
 
