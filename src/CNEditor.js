@@ -121,6 +121,7 @@ export default class CNEditor extends Component {
           break;
 
         case "onChange":
+          this.onChangeTopPosition(message.topPosition);
           this.onChangeHeight(message.height);
           this.onValueChanged(message.data);
           break;
@@ -337,6 +338,10 @@ export default class CNEditor extends Component {
       this.props.onValueChanged(data);
     }
   };
+  
+  onChangeTopPosition = topPosition => {
+    if(this.props.onChangeTopPosition) this.props.onChangeTopPosition(topPosition);    
+  }
 
   onChangeHeight = height => {
     if(this.props.onChangeSize) this.props.onChangeSize(height);
