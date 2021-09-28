@@ -35,6 +35,7 @@ const editorHTML = `
         
         #editor {
            flex-grow: 1;
+           padding-bottom: 35px; // Toolbar Height
         }
 
         #editor:focus {
@@ -120,9 +121,19 @@ const editorHTML = `
             });
 
             document.getElementById("editor").addEventListener("input", function() {
+                var sel = window.getSelection();
+                var range = sel.getRangeAt(0);
+                var span = document.createElement('span');// something happening here preventing selection of elements
+                range.collapse(false);
+                range.insertNode(span);
+                var topPosition = span.offsetTop;
+                span.parentNode.removeChild(span);
+
                 let contentChanged = JSON.stringify({
                     type: 'onChange',
                     height: document.getElementById("editor").offsetHeight,
+                    yOffset: window.pageYOffset,
+                    topPosition: topPosition,
                     data: document.getElementById("editor").innerHTML });
                 sendMessage(contentChanged);
             }, false);
