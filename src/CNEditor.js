@@ -121,9 +121,12 @@ export default class CNEditor extends Component {
           break;
 
         case "onChange":
-          this.onChangeTopPosition(message.topPosition);
+          this.onChangeTopPosition(message.topPosition, message.height);
           this.onChangeHeight(message.height);
           this.onValueChanged(message.data);
+          break;
+        case "selectionChange":
+          this.onChangeTopPosition(message.topPosition, message.clientHeight);
           break;
         case "onResize":
             this.onChangeHeight(message.height);
@@ -339,8 +342,8 @@ export default class CNEditor extends Component {
     }
   };
   
-  onChangeTopPosition = topPosition => {
-    if(this.props.onChangeTopPosition) this.props.onChangeTopPosition(topPosition);    
+  onChangeTopPosition = (topPosition, editorOffsetHeight) => {
+    if(this.props.onChangeTopPosition) this.props.onChangeTopPosition(topPosition, editorOffsetHeight);    
   }
 
   onChangeHeight = height => {
@@ -396,7 +399,7 @@ export default class CNEditor extends Component {
       customStyles
     ).replace('initial-scale=1.0">', 'initial-scale=1.0 user-scalable=no">') ;
     return (
-      // <View style={styles.container} onLayout={this.onLayout}>
+      <View style={styles.container} onLayout={this.onLayout}>
         <WebView
           style={styles.webView}
           ref={webView => (this.webViewRef = webView)}
@@ -419,7 +422,7 @@ export default class CNEditor extends Component {
           scrollEnabled={false}
           onLoadEnd={this.handleLoadEnd}
         />
-      // </View>
+      </View>
     );
   }
 }
