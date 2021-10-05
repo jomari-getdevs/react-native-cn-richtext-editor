@@ -34,7 +34,7 @@ const editorHTML = `
         }
         
         #editor {
-           flex-grow: 1;
+           flex: 1;
            padding-bottom: 35px; // Toolbar Height
         }
 
@@ -116,8 +116,37 @@ const editorHTML = `
             }
 
             document.addEventListener('selectionchange', function() {
+              var sel = window.getSelection();
+              var range = sel.getRangeAt(0);
+              var span = document.createElement('span');// something happening here preventing selection of elements
+              range.collapse(false);
+              range.insertNode(span);
+              var topPosition = span.offsetTop;
+              span.parentNode.removeChild(span);
+
+              let contentChanged = JSON.stringify({
+                  type: 'selectionChange',
+                  clientHeight: editor.offsetHeight,
+                  topPosition: topPosition});
+              sendMessage(contentChanged);
                 getSelectedStyles();
                 getSelectedTag();
+            });
+
+            document.addEventListener('paste', function() {
+              var sel = window.getSelection();
+              var range = sel.getRangeAt(0);
+              var span = document.createElement('span');// something happening here preventing selection of elements
+              range.collapse(false);
+              range.insertNode(span);
+              var topPosition = span.offsetTop;
+              span.parentNode.removeChild(span);
+
+              let contentChanged = JSON.stringify({
+                  type: 'selectionChange',
+                  clientHeight: editor.offsetHeight,
+                  topPosition: topPosition});
+              sendMessage(contentChanged);
             });
 
             document.getElementById("editor").addEventListener("input", function() {
